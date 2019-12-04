@@ -11,7 +11,7 @@
         android:id="@+id/txtVwDatosSensores"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/txt_sensores"
+        android:text="@string/txt_actuales"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
 
@@ -66,7 +66,7 @@
                 android:id="@+id/txtVwDatosCaptura"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/txt_sensores"
+                android:text="@string/txt_capturados"
                 android:textColor="@android:color/black"
                 android:textSize="18sp" />
         </LinearLayout>

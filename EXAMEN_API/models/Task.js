@@ -8,7 +8,7 @@ var Task={
         return db.query("select * from clima where id=?",[id],callback);
     },
     addTask:function(Task,callback){
-        return db.query("insert into clima(temperatura,humedad,hora) values(?,?,?)",[Task.Temperatura,Task.Humedad,Task.Hora],callback);
+        return db.query("insert into clima(temperatura,humedad,hora,fecha) values(?,?,?,?)",[Task.Temperatura,Task.Humedad,Task.Hora,Task.Fecha],callback);
     },
     deleteTask:function(id,callback){
         return db.query("delete from clima where id=?",[id],callback);

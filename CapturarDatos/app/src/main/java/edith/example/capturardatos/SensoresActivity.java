@@ -38,6 +38,7 @@ public class SensoresActivity extends AppCompatActivity implements SensorEventLi
     private Sensor senTemperature, senHumidity; //temperatura, humedad
     private Calendar diaTomado = null;
     private String horaCaptura = "";
+    private String fechaCaptura = "";
     MySQLAPIconnection mySQLAPIconnection; //API
 
     //Ciclo de vida
@@ -120,8 +121,9 @@ public class SensoresActivity extends AppCompatActivity implements SensorEventLi
         datosSensores[TEMP][0] = termTemperature;
         datosSensores[HUMI][0] = porcentHumidity;
 
-        sCade += "Temperatura: " + datosSensores[TEMP][0] + " °C\n\n";
-        sCade += "Humedad: " + datosSensores[HUMI][0] + "%";
+        sCade += "DATOS ACTUALES\n";
+        sCade += "Temperatura: " + datosSensores[TEMP][0] + " °C\n";
+        sCade += "Humedad: " + datosSensores[HUMI][0] + "%\n";
         txtVwDatosSensores.setText(sCade);
     }
 
@@ -165,7 +167,7 @@ public class SensoresActivity extends AppCompatActivity implements SensorEventLi
     }
 
     String obtenerFecha(int diaMes, int mes, int year){
-        String sDia=diaMes+"",sMes=mes+"", sYear=year+"";
+        String sDia = diaMes + "", sMes = (mes + 1) + "", sYear = year + "";
         if (diaMes <=9 )
             sDia="0" + sDia;
         if (mes <= 9)
@@ -173,7 +175,9 @@ public class SensoresActivity extends AppCompatActivity implements SensorEventLi
         if (year <= 9)
             sYear = "0" +sYear;
 
-        return sDia+"-"+sMes+"-"+sYear;
+        fechaCaptura = sDia + "-" + sMes + "-" + sYear;
+
+        return fechaCaptura;
     }
 
     void mandarDatos(){
@@ -195,15 +199,15 @@ public class SensoresActivity extends AppCompatActivity implements SensorEventLi
 
             mandarDatos();
 
-            String sDatos = txtVwDatosCaptura.getText().toString() + "\n\n";
-            sDatos += "Temperatura: " + datosSensores[TEMP][0] + " °C\n" + "Humedad: " + datosSensores[HUMI][0] + "%\n" + "Hora Captura: " +
-                      obtenerHora(hora, minutos, segundos, milis)+", " + obtenerFecha(diaMes,mes,year);
+            String sDatos = txtVwDatosCaptura.getText().toString() + "\n";
+            sDatos += "Temperatura: " + datosSensores[TEMP][0] + " °C\n" + "Humedad: " + datosSensores[HUMI][0] + "%\n" + "Fecha y Hora: " +
+                      obtenerFecha(diaMes, mes, year) + ", " + obtenerHora(hora, minutos, segundos, milis) + "\n";
             txtVwDatosCaptura.setText(sDatos);
         }
     }
 
     class MySQLAPIconnection extends AsyncTask<Void, Void, String> {
-        private final String url = "http://192.168.1.83:3000/Tasks";
+        private final String url = "http://192.168.1.66:3000/Tasks";
 
         @Override protected String doInBackground(Void... voids) {
             String sResu = null;
@@ -223,6 +227,7 @@ public class SensoresActivity extends AppCompatActivity implements SensorEventLi
                     jsonObject.put("Temperatura", termTemperature);
                     jsonObject.put("Humedad", porcentHumidity);
                     jsonObject.put("Hora", horaCaptura);
+                    jsonObject.put("Fecha", fechaCaptura);
                 }
                 //Enviar datos
                 DataOutputStream escribir = new DataOutputStream(httpCon.getOutputStream());
