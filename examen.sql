@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 04, 2019 at 06:34 AM
+-- Generation Time: Dec 04, 2019 at 10:03 PM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.3.10
 
@@ -32,7 +32,8 @@ CREATE TABLE `clima` (
   `id` int(11) NOT NULL,
   `temperatura` float NOT NULL,
   `humedad` float NOT NULL,
-  `hora` text COLLATE utf8mb4_spanish_ci NOT NULL
+  `hora` text COLLATE utf8mb4_spanish_ci NOT NULL,
+  `fecha` text COLLATE utf8mb4_spanish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
