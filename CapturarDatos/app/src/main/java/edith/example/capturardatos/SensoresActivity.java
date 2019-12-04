@@ -6,9 +6,13 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Calendar;
 
 public class SensoresActivity extends AppCompatActivity implements SensorEventListener {
     final int TEMP = 0;
@@ -25,6 +29,7 @@ public class SensoresActivity extends AppCompatActivity implements SensorEventLi
     private SensorManager sensorManager;
     //temperatura, humedad, presión, proximidad, iluminación
     private Sensor senTemperature, senHumidity, senPressure, senLight;
+    private TextView tvMosBtn;
 
     //Clico de vida
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,7 @@ public class SensoresActivity extends AppCompatActivity implements SensorEventLi
         setContentView(R.layout.activity_sensores);
 
         tvDatosSensores = findViewById(R.id.tvDatosSensores);
+        tvMosBtn = findViewById(R.id.txtVwMosBtn);
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null) {
@@ -40,6 +46,35 @@ public class SensoresActivity extends AppCompatActivity implements SensorEventLi
             senLight = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
             senTemperature = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
         }
+
+        new Thread(new Runnable() { // se usa un hilo con while(true) para actuar como un listener de datoDelDia
+            @Override
+            public void run() {
+                System.out.println("inicio de hilo");
+                int nDatos=0;
+                boolean datoDelDia = false;
+                Calendar diaTomado = null;
+                while(true){//no ortodoxo, me duele verlo :'(
+                    if (!datoDelDia){//si no tiene dato del dia lo toma
+                        nDatos++;
+                        datoDelDia = nDatos == 2; //si se han mandado dos datos no se mete al condicional
+                        System.out.println("mandar datos temperatura:" + termTemperature); //aqui va el "metodo para mandar a la base de datos"
+                        //mandarDatos();
+                        System.out.println("faf");
+                        //tvMosBtn.setText("temperatura: ");
+                        diaTomado = Calendar.getInstance(); //define que el dia que tomo el dato es hoy
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if(diaTomado.DAY_OF_MONTH != Calendar.getInstance().DAY_OF_MONTH ){//cuando es el día que tomo no es hoy el nDatos es cero
+                        nDatos = 0;
+                    }
+                }
+            }
+        }).start();
 
     }
 
@@ -89,6 +124,10 @@ public class SensoresActivity extends AppCompatActivity implements SensorEventLi
         sCade = sCade + "PRESIÓN: " + datosSensores[PRES][0] + " mbar\n\n";
         sCade = sCade + "HUMEDAD: " + datosSensores[HUMI][0] + "%";
         tvDatosSensores.setText(sCade);
+    }
+
+    void mandarDatos(){
+        tvMosBtn.setText("temperatura: " + datosSensores[TEMP][0]);
     }
 
 }
