@@ -71,13 +71,19 @@ public class SensoresActivity extends AppCompatActivity implements SensorEventLi
                         int minutos = diaTomado.get(Calendar.MINUTE);
                         int segundos = diaTomado.get(Calendar.SECOND);
                         int milis = diaTomado.get(Calendar.MILLISECOND);
+                        int diaMes = diaTomado.get(Calendar.DAY_OF_MONTH);
+                        int mes = diaTomado.get(Calendar.MONTH);
+                        int year =diaTomado.get(Calendar.YEAR); //en inglés para no usar ñ o ni
                         obtenerHora(hora, minutos, segundos, milis);
+                        obtenerFecha(diaMes,mes,year);
+
                         mandarDatos(); //API
                         try {
                             Thread.sleep(950);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+                        //if()
                     }
                 }
             }
@@ -158,6 +164,18 @@ public class SensoresActivity extends AppCompatActivity implements SensorEventLi
         return horaCaptura;
     }
 
+    String obtenerFecha(int diaMes, int mes, int year){
+        String sDia=diaMes+"",sMes=mes+"", sYear=year+"";
+        if (diaMes <=9 )
+            sDia="0" + sDia;
+        if (mes <= 9)
+            sMes = "0" + sMes;
+        if (year <= 9)
+            sYear = "0" +sYear;
+
+        return sDia+"-"+sMes+"-"+sYear;
+    }
+
     void mandarDatos(){
         //API
         mySQLAPIconnection = new MySQLAPIconnection();
@@ -171,18 +189,21 @@ public class SensoresActivity extends AppCompatActivity implements SensorEventLi
             int minutos = diaTomado.get(Calendar.MINUTE);
             int segundos = diaTomado.get(Calendar.SECOND);
             int milis = diaTomado.get(Calendar.MILLISECOND);
+            int diaMes = diaTomado.get(Calendar.DAY_OF_MONTH);
+            int mes = diaTomado.get(Calendar.MONTH);
+            int year =diaTomado.get(Calendar.YEAR); //en inglés para no usar ñ o ni
 
             mandarDatos();
 
             String sDatos = txtVwDatosCaptura.getText().toString() + "\n\n";
             sDatos += "Temperatura: " + datosSensores[TEMP][0] + " °C\n" + "Humedad: " + datosSensores[HUMI][0] + "%\n" + "Hora Captura: " +
-                      obtenerHora(hora, minutos, segundos, milis);;
+                      obtenerHora(hora, minutos, segundos, milis)+", " + obtenerFecha(diaMes,mes,year);
             txtVwDatosCaptura.setText(sDatos);
         }
     }
 
     class MySQLAPIconnection extends AsyncTask<Void, Void, String> {
-        private final String url = "http://192.168.1.66:3000/Tasks";
+        private final String url = "http://192.168.1.83:3000/Tasks";
 
         @Override protected String doInBackground(Void... voids) {
             String sResu = null;
