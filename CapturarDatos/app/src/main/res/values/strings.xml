@@ -2,5 +2,6 @@
     <string name="app_name">Capturar Datos</string>
     <string name="btn_sensores_disp">Sensores Disponibles</string>
     <string name="btn_capturar_datos">Capturar Datos</string>
-    <string name="txt_sensores">Datos Sensores</string>
+    <string name="btn_datos_nuevos">Nuevos Datos</string>
+    <string name="txt_sensores">Datos Capturados</string>
 </resources>
